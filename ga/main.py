@@ -105,10 +105,11 @@ with open('../resources/train.csv', 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',')
 	for record in reader:
 		row += 1
-		print 'reading row ' + str(row) + '...'
-		if (row == 0):
+		if row == 0:
 			keys = record
 			continue
+		elif row == 1001:
+			break
 		data[record[0]] = {}
 		for ix,field in enumerate(keys[1:]):
 			data[record[0]][field] = record[ix + 1]
@@ -125,3 +126,12 @@ print 'creating fitness calculator...'
 fc = FitnessCalc(data)
 
 print 'fitness calculator created...'
+print 'generating initial population...'
+
+ga.create_initial_population()
+
+print 'initiail population created...'
+
+for indiv in ga.population:
+	print 'testing chromosome ' + indiv['chromosome'] + '...'
+	fc.calculate_fitness(indiv['chromosome'])
