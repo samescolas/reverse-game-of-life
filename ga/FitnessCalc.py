@@ -12,8 +12,8 @@ class FitnessCalc:
 		self.training_data = training_data
 
 	def calculate_fitness(self,chromosome):
-		for ix in xrange(1,50000):
-			self.test_chromosome(self.training_data[str(ix)], chromosome)
+		for ix in xrange(1,500):
+			self.test_chromosome(self.training_data['42'], chromosome)
 
 
 	def test_chromosome(self, example, chromosome):
@@ -23,16 +23,16 @@ class FitnessCalc:
 				res = self.test_gene(chromosome[activator+1:activator+length+1], example, ix)
 
 	def test_gene(self, gene, example, ix):
-		print example
-		test = {
-			0: check_pop,
-			1: check_alive,
-			2: check_neighbors,
-			3: check_living_neighbors,
-			4: check_size,
-			5: check_isolation_layers,
-			6: check_nearest_edge,
-			7: check_quadrant,
-			8: check_quadrant_density,
-			9: check_delta
-		}[ix](gene, example)
+		for cell in xrange(1,401):
+			test = {
+				0: check_pop,
+				1: check_alive,
+				2: check_neighbors,
+				3: check_living_neighbors,
+				4: check_size,
+				5: check_isolation_layers,
+				6: check_nearest_edge,
+				7: check_quadrant,
+				8: check_quadrant_density,
+				9: check_delta
+			}[ix](gene, example)
