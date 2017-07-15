@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
 import csv
-import matplotlib.pyplot as plt
+from FitnessCalc import FitnessCalc
+from GeneticAlgorithm import GeneticAlgorithm
 
 def	get_living_neighbors(record, pos):
 	(l,r,t,b) = (pos-1,pos+1,pos-20,pos+20)
@@ -97,10 +98,14 @@ data = {}
 
 # read data from csv
 row = -1
+
+print 'reading in data...'
+
 with open('../resources/train.csv', 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',')
 	for record in reader:
 		row += 1
+		print 'reading row ' + str(row) + '...'
 		if (row == 0):
 			keys = record
 			continue
@@ -110,11 +115,13 @@ with open('../resources/train.csv', 'rb') as csvfile:
 		data[record[0]]['population'] = reduce((lambda x,y: int(x)+int(y)), record[403:])
 		row += 1
 
-pos = 1
-for i in xrange(1,50000):
-	if data[str(i)]['stop.' + str(pos)] == '1':
-		aliveX.append(float(get_living_neighbors(data[str(i)], pos))/get_neighbors(pos))
-		aliveY.append(get_quadrant(pos) * data[str(i)]['ending_population'])
-	else:
-		deadX.append(float(get_living_neighbors(data[str(i)], pos))/get_neighbors(pos))
-		deadY.append(get_quadrant(pos) * data[str(i)]['ending_population'])
+print 'creating ga...'
+
+ga = GeneticAlgorithm()
+
+print 'ga created...'
+print 'creating fitness calculator...'
+
+fc = FitnessCalc(data)
+
+print 'fitness calculator created...'
