@@ -37,19 +37,3 @@ class GeneticAlgorithm:
 		for i in xrange(self.pop_size):
 			self.population.append(self.create_individual())
 
-g = GeneticAlgorithm()
-
-print 'genes: ' + str(g.genes)
-
-print 'pop size: ' + str(g.pop_size)
-
-print 'creating initial population...'
-g.create_initial_population()
-print 'success!'
-
-f = FitnessCalc.FitnessCalc(["testtesttesttesttesttesttesttesttesttesttesttesttest"]*10)
-
-f.calculate_fitness(g.population[0]['chromosome'])
-print 'neeeeeeeeext'
-print ''
-f.calculate_fitness(g.population[42]['chromosome'])
