@@ -1,4 +1,5 @@
 from FitnessChecks import *
+import sys
 
 class FitnessCalc:
 
@@ -11,17 +12,18 @@ class FitnessCalc:
 		self.training_data = training_data
 
 	def calculate_fitness(self,chromosome):
-		for example in self.training_data:
-			self.test_chromosome(example, chromosome)
+		for ix in xrange(1,50000):
+			self.test_chromosome(self.training_data[str(ix)], chromosome)
 
 
 	def test_chromosome(self, example, chromosome):
 		classification_met = True
 		for ix,(activator,length) in enumerate(self.genes[:-1]):
 			if chromosome[activator] == '1':
-				res = self.test_gene(chromosome[activator+1:activator+length+1], example[ix], ix)
+				res = self.test_gene(chromosome[activator+1:activator+length+1], example, ix)
 
 	def test_gene(self, gene, example, ix):
+		print example
 		test = {
 			0: check_pop,
 			1: check_alive,
