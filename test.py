@@ -1,8 +1,11 @@
+#!/usr/bin/python
+
 import csv
 import matplotlib.pyplot as plt
 
-def	get_neighbors(record, pos):
-	l,r,t,b = pos-1,pos+1,pos-20,pos+20
+def	get_living_neighbors(record, pos):
+	(l,r,t,b) = (pos-1,pos+1,pos-20,pos+20)
+	(tl,tr,bl,br) = (t-1,t+1,b-1,b+1)
 	neighbors = 0
 	if l > 0 and pos % 20 != 1:
 		if record['stop.' + str(l)] == '1':
@@ -15,6 +18,18 @@ def	get_neighbors(record, pos):
 			neighbors += 1
 	if b < 400:
 		if record['stop.' + str(b)] == '1':
+			neighbors += 1
+	if tl > 0 and pos % 20 != 1:
+		if record['stop.' + str(tl)] == '1':
+			neighbors += 1
+	if tr > 0 and pos % 20 != 0:
+		if record['stop.' + str(tr)] == '1':
+			neighbors += 1
+	if bl < 400:
+		if record['stop.' + str(bl)] == '1':
+			neighbors += 1
+	if br < 400:
+		if record['stop.' + str(br)] == '1':
 			neighbors += 1
 	return neighbors
 
@@ -50,6 +65,35 @@ def	space_vert(record, pos):
 		x -= 20
 	return space
 
+def get_neighbors(pos):
+	if pos == 1 or pos == 20 or pos == 381 or pos == 400:
+		return 3
+	elif pos < 20 or pos > 380 or pos % 20 < 2:
+		return 5
+	return 8
+
+def min_edge(pos):
+	if pos < 201:
+		if pos % 20 < 11:
+			return min(pos % 20, int(pos / 20))
+		return min(20 - (pos % 20), int(pos / 20))
+	else:
+		if pos % 20 < 11:
+			return min(pos % 20, 20 - (pos / 20))
+	return min(20 - (pos % 20), 20 - (pos / 20))
+
+def get_quadrant(pos):
+	if pos < 201:
+		if pos % 20 < 11:
+			return 2
+		return 1
+	else:
+		if pos % 20 < 11:
+			return 3
+	return 4
+
+#def	get_quadrant_population(pos
+
 # initialize empty collection
 data = {}
 
@@ -73,18 +117,15 @@ aliveX = []
 aliveY = []
 deadX = []
 deadY = []
-
-pos = 10
-
+deltas = []
+pos = 1
 for i in xrange(1,50000):
-	if data[str(i)]['delta'] != '2':
-		continue
 	if data[str(i)]['stop.' + str(pos)] == '1':
-		aliveX.append(space_vert(data[str(i)], pos) + space_horiz(data[str(i)], pos))
-		aliveY.append(data[str(i)]['ending_population'])
+		aliveX.append(float(get_living_neighbors(data[str(i)], pos))/get_neighbors(pos))
+		aliveY.append(get_quadrant(pos) * data[str(i)]['ending_population'])
 	else:
-		deadX.append(space_vert(data[str(i)], pos) + space_horiz(data[str(i)], pos))
-		deadY.append(data[str(i)]['ending_population'])
+		deadX.append(float(get_living_neighbors(data[str(i)], pos))/get_neighbors(pos))
+		deadY.append(get_quadrant(pos) * data[str(i)]['ending_population'])
 
 plt.plot(deadX, deadY, 'rx')
 plt.plot(aliveX, aliveY, 'bv')
