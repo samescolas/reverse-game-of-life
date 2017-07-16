@@ -5,8 +5,8 @@ class FitnessCalc:
 
 	def __init__(self, training_data):
             self.genes = [
-                    (0,5), (6,1), (8,3), (12,6), (19,5),
-                    (25,5), (31,3), (35,4), (40,5), (46,5), (52,1)
+                    (0,4), (5,1), (7,2), (10,4), (15,5),
+                    (21,5), (27,3), (31,4), (36,5), (42,5), (48,1)
             ]
             self.chromosome_length = 53
             self.training_data = training_data
