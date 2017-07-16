@@ -5,13 +5,13 @@ import FitnessCalc
 # {05}[06,07) | alive?
 # {07}[08,10) | corner,side,center
 # {10}[11,15) | # of living neighbors BINARY
-# {17}[18,23) | # of living cells
-# {23}[24,29) | layers of isolation
-# {29}[30,33) | distance to nearest edge
-# {33}[34,38) | quadrant
-# {38}[39,44) | quadrant population density
-# {44}[45,50) | delta
-# {50}[51,52) | prediction
+# {15}[16,21) | # of living cells 6 buckets: 1,3,5,7,9,12+
+# {21}[22,27) | layers of isolation
+# {27}[28,31) | distance to nearest edge
+# {31}[32,36) | quadrant
+# {36}[37,42) | quadrant population density
+# {42}[43,48) | delta
+# {48}[49,50) | prediction
 
 class GeneticAlgorithm:	
 	def __init__(self):
@@ -22,7 +22,7 @@ class GeneticAlgorithm:
 		self.chromosome_length = 53
 		self.crossover_rate = 0.7
 		self.mutation_rate = 0.001
-		self.activation_rate = 0.3
+		self.activation_rate = 0.2
 		self.pop_size = 100
 		self.max_allowable_generations = 400
 		self.population = []
