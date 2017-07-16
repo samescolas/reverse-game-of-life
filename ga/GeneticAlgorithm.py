@@ -1,6 +1,18 @@
 import random
 import FitnessCalc
 
+# {00}[01,06) | population
+# {06}[07,08) | alive?
+# {08}[09,12) | corner,side,center
+# {12}[13,19) | # of living neighbors
+# {19}[20,25) | # of living cells
+# {25}[26,31) | layers of isolation
+# {31}[32,35) | distance to nearest edge
+# {35}[36,40) | quadrant
+# {40}[41,46) | quadrant population density
+# {46}[47,52) | delta
+# {52}[53,54) | prediction
+
 class GeneticAlgorithm:	
 	def __init__(self):
 		self.genes = [
@@ -24,9 +36,10 @@ class GeneticAlgorithm:
 	def create_random_chromosome(self):
 		chromosome = ['0']*(self.chromosome_length - 1)
 		for (activator,length) in self.genes[:-1]:
-			if random.random() > 0.5:
+			if random.random() > self.activation_rate:
 				chromosome[activator] = '1'
-			chromosome[activator + random.randint(0, length)] = '1'
+                        if random.random() > float(1.0/(length+1)):
+			    chromosome[activator + random.randint(0, length)] = '1'
 		if random.random() < self.activation_rate:
 			chromosome += '1'
 		else:
