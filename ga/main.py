@@ -7,44 +7,12 @@ from data_processing import *
 
 import sys
 
-def space_horiz(record, pos):
-	space = 0
-	x = pos + 1
-	while True:
-		if (x % 20 == 1 or record['stop.' + str(x)] == '1'):
-			break
-		space += 1
-		x += 1
-	x = pos - 1
-	while True:
-		if (x % 20 == 0 or record['stop.' + str(x)] == '1'):
-			break
-		space += 1
-		x -= 1
-	return space
-
-def	space_vert(record, pos):
-	space = 0
-	x = pos + 20
-	while True:
-		if (x >= 400 or record['stop.' + str(x)] == '1'):
-			break
-		space += 1
-		x += 20
-	x = pos - 20
-	while True:
-		if (x <= 0 or record['stop.' + str(x)] == '1'):
-			break
-		space += 1
-		x -= 20
-	return space
-
-# read data from csv
-print 'reading in data...'
-
 # initialize empty collection
 summary = {}
 
+print 'reading in data...'
+
+# read data from csv
 with open('../resources/train.csv', 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',')
 	for i,record in enumerate(reader):
@@ -75,19 +43,26 @@ with open('../resources/train.csv', 'rb') as csvfile:
 					else:
 						summary[i]['cells'][j+1]['size'] = 0
 
-print 'creating ga...'
+# create GA instance
 ga = GeneticAlgorithm()
 
-
-print 'ga created...'
-print 'creating fitness calculator...'
+# load data into fitness calculator
 fc = FitnessCalc(summary)
 
-print 'fitness calculator created...'
-print 'generating initial population...'
+#create initial population
 ga.create_initial_population()
 
-print 'initiail population created...'
+#assign fitness levels
+total_fitness = 0.0
 for indiv in ga.population:
-	print 'testing chromosome ' + indiv['chromosome'] + '...'
-	indiv['fitness'] = fc.calculate_fitness(indiv['chromosome'])
+	fitness = fc.calculate_fitness(indiv['chromosome'])
+	total_fitness += fitness
+	indiv['fitness'] = fitness
+	print str(fitness) + ' ' + indiv['chromosome']
+
+#selection (ROULETTE STYLE)
+c1 = ga.roulette_selection(total_fitness)
+c2 = ga.roulette_selection(total_fitness)
+
+print c1
+print c2
