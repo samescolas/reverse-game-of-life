@@ -52,4 +52,3 @@ class GeneticAlgorithm:
 	def create_initial_population(self):
 		for i in xrange(self.pop_size):
 			self.population.append(self.create_individual())
-
