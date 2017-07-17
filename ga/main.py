@@ -151,14 +151,18 @@ with open('../resources/train.csv', 'rb') as csvfile:
                 summary[i]['population'] = reduce((lambda x,y: int(x)+int(y)), record[403:])
                 summary[i]['delta'] = record[1]
                 summary[i]['cells'] = {}
+                print str(i/1000.0*100) + '%'
                 for j,cell in enumerate(keys[402:]):
-                        summary[i]['cells'][j] = {}
-                        summary[i]['cells'][j]['status'] = record[j+2]
-                        summary[i]['cells'][j]['neighbors'] = get_neighbors(int(cell[5:]), record[401:])
-                        summary[i]['cells'][j]['size'] = get_size(int(cell[5:]), record[401:])
+                        summary[i]['cells'][j+1] = {}
+                        summary[i]['cells'][j+1]['status'] = record[j+1]
+                        summary[i]['cells'][j+1]['neighbors'] = get_neighbors(int(cell[5:]), record[401:])
+                        if record[j+1] == '1':
+                            summary[i]['cells'][j+1]['size'] = get_size(int(cell[5:]), record[401:])
+                        else:
+                            summary[i]['cells'][j+1]['size'] = 0
 
 
-print summary
+print summary[1]
 
 sys.exit(0)
 
