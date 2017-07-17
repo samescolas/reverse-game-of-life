@@ -39,17 +39,6 @@ def	space_vert(record, pos):
 		x -= 20
 	return space
 
-
-def min_edge(pos):
-	if pos < 201:
-		if pos % 20 < 11:
-			return min(pos % 20, int(pos / 20))
-		return min(20 - (pos % 20), int(pos / 20))
-	else:
-		if pos % 20 < 11:
-			return min(pos % 20, 20 - (pos / 20))
-	return min(20 - (pos % 20), 20 - (pos / 20))
-
 # read data from csv
 print 'reading in data...'
 
