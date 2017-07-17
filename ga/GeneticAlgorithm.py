@@ -1,7 +1,10 @@
 import random
 import FitnessCalc
 
-# {00}[01,05) | population
+# I should probably graph the bucketized values
+# and distribute buckets evenly or something...
+
+# {00}[01,05) | population: 20%,40%,60%,80%,100%
 # {05}[06,07) | alive?
 # {07}[08,10) | corner,side,center
 # {10}[11,15) | # of living neighbors BINARY
