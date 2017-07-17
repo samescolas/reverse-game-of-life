@@ -11,16 +11,16 @@ import FitnessCalc
 # {15}[16,21) | # of living cells 6 buckets: 1,3,5,7,9,12+
 # {21}[22,27) | layers of isolation
 # {27}[28,31) | distance to nearest edge
-# {31}[32,36) | quadrant
-# {36}[37,42) | quadrant population density
-# {42}[43,48) | delta
-# {48}[49,50) | prediction
+# {31}[32,35) | quadrant
+# {35}[36,41) | quadrant population density
+# {41}[42,47) | delta
+# {47}[48,49) | prediction
 
 class GeneticAlgorithm:	
 	def __init__(self):
 		self.genes = [
 			(0,4), (5,1), (7,2), (10,4), (15,5),
-			(21,5), (27,3), (31,4), (36,5), (42,5), (48,1)
+			(21,5), (27,3), (31,3), (35,5), (41,5), (47,1)
 		]
 		self.chromosome_length = 53
 		self.crossover_rate = 0.7
