@@ -1,9 +1,14 @@
 from fitness_checks import *
 import sys
 
+# firness equation: w1*PA + w2*CPH+w3*S
+
 class FitnessCalc:
 
 	def __init__(self, training_data):
+		self.w1 = 0.6
+		self.w2 = 0.2
+		self.w3 = 0.2
 		self.genes = [
 			(0,4), (5,1), (7,2), (10,4), (15,5),
 			(21,5), (27,3), (31,3), (35,5), (41,5), (47,1)
@@ -17,11 +22,11 @@ class FitnessCalc:
 		results = 0,0,0,0
 		for ix in xrange(1,self.num_examples + 1):
 			results = [sum(x) for x in zip(results, self.test_chromosome(self.training_data[ix], chromosome))]
-		print 'tp: {}'.format(results[0])
-		print 'fp: {}'.format(results[1])
-		print 'tn: {}'.format(results[2])
-		print 'fn: {}'.format(results[3])
-		print 'total: {}'.format(results[0] + results[1] + results[2] + results[3])
+		tp,fp,tn,fn = results
+		PA = float(tp) / max((tp + fp), 0.000001)
+		S = float(tp) / max((tp + fn), 0.000001)
+		CPH = 10 - reduce((lambda x,y:int(x)+int(y)), [chromosome[x] for x,y in self.genes])
+		return self.w1*PA + self.w2*CPH + self.w3*S
 
 
 	def test_chromosome(self, example, chromosome):
