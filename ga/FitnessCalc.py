@@ -43,17 +43,19 @@ class FitnessCalc:
 					classifications.append(True)
 				else:
 					classification_met = True
-			for ix,c in enumerate(classifications):
-				if c == True:
-					if example['start.' + str(ix+1)] == chromosome[-1]:
-						tp += 1
-					else:
-						fp += 1
+		for ix,c in enumerate(classifications):
+			if ix == 400:
+				break
+			if c == True:
+				if example['cells'][ix + 1]['status'] == chromosome[-1]:
+					tp += 1
 				else:
-					if example['start.' + str(ix+1)] == chromosome[-1]:
-						tn += 1
-					else:
-						fn += 1
+					fp += 1
+			else:
+				if example['cells'][ix + 1]['status'] == chromosome[-1]:
+					fn += 1
+				else:
+					tn += 1
 		return tp,fp,tn,fn
 
         # test chromosome against each cell in grid
@@ -74,5 +76,5 @@ class FitnessCalc:
 					6: check_nearest_edge,
 					7: check_quadrant,
 					8: check_quadrant_density,
-				}[gene_id](gene, data['cells'][ix], cell) )
+				}[gene_id](gene, data['cells'][cell]) )
 		return test
