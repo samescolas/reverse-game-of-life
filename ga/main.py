@@ -4,6 +4,51 @@ import csv
 from FitnessCalc import FitnessCalc
 from GeneticAlgorithm import GeneticAlgorithm
 
+import sys
+  
+def     get_neighbors(cell, example):
+        (l,r,t,b) = (cell-1,cell+1,cell-20,cell+20)
+        (tl,tr,bl,br) = (t-1,t+1,b-1,b+1)
+        neighbors = []
+
+	if l > 0 and cell % 20 != 1:
+		if example[l] == '1':
+                        neighbors.append(l)
+	if r < 400 and cell % 20 != 0:
+		if example[r] == '1':
+                        neighbors.append(r)
+	if t > 0:
+		if example[t] == '1':
+                        neighbors.append(t)
+	if b < 400:
+		if example[b] == '1':
+                        neighbors.append(b)
+	if tl > 0 and cell % 20 != 1:
+		if example[tl] == '1':
+                        neighbors.append(tl)
+	if tr > 0 and cell % 20 != 0:
+		if example[tr] == '1':
+                        neighbors.append(tr)
+	if bl < 400:
+		if example[bl] == '1':
+                        neighbors.append(bl)
+	if br < 400:
+		if example[br] == '1':
+                        neighbors.append(br)
+        return neighbors
+ 
+def     get_size(cell, example):
+        members = {}
+        new = [cell]
+        while len(new) != 0:
+            to_add = new[:]
+            new = []
+            for c in to_add:
+                members[c] = 1
+                new += get_neighbors(c, example)
+            new = [x for x in new if x not in members.keys()]
+        return len(members.keys())
+
 def	get_living_neighbors(record, pos):
 	(l,r,t,b) = (pos-1,pos+1,pos-20,pos+20)
 	(tl,tr,bl,br) = (t-1,t+1,b-1,b+1)
@@ -66,12 +111,6 @@ def	space_vert(record, pos):
 		x -= 20
 	return space
 
-def get_neighbors(pos):
-	if pos == 1 or pos == 20 or pos == 381 or pos == 400:
-		return 3
-	elif pos < 20 or pos > 380 or pos % 20 < 2:
-		return 5
-	return 8
 
 def min_edge(pos):
 	if pos < 201:
@@ -97,28 +136,36 @@ def get_quadrant(pos):
 data = {}
 
 # read data from csv
-row = -1
-
 print 'reading in data...'
 
+summary = {}
 with open('../resources/train.csv', 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',')
-	for record in reader:
-		row += 1
-		if row == 0:
+	for i,record in enumerate(reader):
+		if i == 0:
 			keys = record
 			continue
-		elif row == 1001:
+		elif i == 1001:
 			break
-		data[record[0]] = {}
-		for ix,field in enumerate(keys[1:]):
-			data[record[0]][field] = record[ix + 1]
-		data[record[0]]['population'] = reduce((lambda x,y: int(x)+int(y)), record[403:])
-		row += 1
+                summary[i] = {}
+                summary[i]['population'] = reduce((lambda x,y: int(x)+int(y)), record[403:])
+                summary[i]['delta'] = record[1]
+                summary[i]['cells'] = {}
+                for j,cell in enumerate(keys[402:]):
+                        summary[i]['cells'][j] = {}
+                        summary[i]['cells'][j]['status'] = record[j+2]
+                        summary[i]['cells'][j]['neighbors'] = get_neighbors(int(cell[5:]), record[401:])
+                        summary[i]['cells'][j]['size'] = get_size(int(cell[5:]), record[401:])
+
+
+print summary
+
+sys.exit(0)
 
 print 'creating ga...'
 
 ga = GeneticAlgorithm()
+
 
 print 'ga created...'
 print 'creating fitness calculator...'
