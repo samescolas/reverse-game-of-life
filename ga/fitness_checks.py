@@ -10,14 +10,16 @@ def	check_pop(gene, population):
             return True
 	return False
 
-def	check_alive(gene, val, cell):
-        if val['start.' + str(cell)] == gene:
-            return True
+def	check_alive(gene, data):
+	if data['status'] == '1':
+		return True
 	return False
 
 def	check_neighbors(gene, data):
-	if '1' not in gene and data['neighbors'] == 3:
-		return True
+	if '1' not in gene:
+		if data['neighbors'] == 3:
+			return True
+		return False
 	elif gene.index('1') == 0 and data['neighbors'] == 5:
 		return True
 	elif gene.index('1') == 1 and data['neighbors'] == 8:
