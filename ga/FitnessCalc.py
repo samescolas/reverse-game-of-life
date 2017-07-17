@@ -76,5 +76,5 @@ class FitnessCalc:
                         6: check_nearest_edge,
                         7: check_quadrant,
                         8: check_quadrant_density,
-                    }[gene_id](gene, data, cell) )
+                    }[gene_id](gene, data['cells'][ix], cell) )
             return test
