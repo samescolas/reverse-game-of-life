@@ -51,14 +51,14 @@ with open('../resources/train.csv', 'rb') as csvfile:
 		if i == 0:
 			keys = record
 			continue
-		elif i == 1001:
+		elif i == 501:
 			break
                 summary[i] = {
 					'population': reduce((lambda x,y: int(x)+int(y)), record[402:]),
 					'delta': record[1],
 					'cells': {}
 				}
-                print str(i/1000.0*100) + '%'
+                print str(i/500.0*100) + '%'
                 for j,cell in enumerate(keys[402:]):
 					neighbors = get_neighbors(int(cell[5:]), record[401:])
 					density = get_quadrant_densities(record[401:])
@@ -74,9 +74,6 @@ with open('../resources/train.csv', 'rb') as csvfile:
 						summary[i]['cells'][j+1]['size'] = get_size(int(cell[5:]), record[401:])
 					else:
 						summary[i]['cells'][j+1]['size'] = 0
-
-print summary[1]
-sys.exit(1)
 
 print 'creating ga...'
 ga = GeneticAlgorithm()
