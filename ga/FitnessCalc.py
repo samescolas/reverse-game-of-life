@@ -10,6 +10,7 @@ class FitnessCalc:
             ]
             self.chromosome_length = 53
             self.training_data = training_data
+            self.additional_data = summarize_data(self.training_data)
 
         # test chromosome against each example in training set
 	def calculate_fitness(self,chromosome):
