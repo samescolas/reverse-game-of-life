@@ -90,4 +90,4 @@ ga.create_initial_population()
 print 'initiail population created...'
 for indiv in ga.population:
 	print 'testing chromosome ' + indiv['chromosome'] + '...'
-	fc.calculate_fitness(indiv['chromosome'])
+	indiv['fitness'] = fc.calculate_fitness(indiv['chromosome'])
