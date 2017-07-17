@@ -23,7 +23,7 @@ class GeneticAlgorithm:
 			(21,5), (27,3), (31,3), (35,5), (41,5), (47,1)
 		]
 		self.chromosome_length = 53
-		self.crossover_rate = 0.7
+		self.crossover_ix = 31
 		self.mutation_rate = 0.001
 		self.activation_rate = 0.2
 		self.pop_size = 100
@@ -52,3 +52,16 @@ class GeneticAlgorithm:
 	def create_initial_population(self):
 		for i in xrange(self.pop_size):
 			self.population.append(self.create_individual())
+
+	def roulette_selection(self, total_fitness):
+		threshold = random.randint(0, int(total_fitness))
+		fitness_sum = 0.0
+		for indiv in self.population:
+			fitness_sum += indiv['fitness']
+			if fitness_sum >= threshold:
+				return indiv['chromosome']
+		return indiv['chromosome']
+
+	def crossover(self, parent1, parent2):
+		offspring1 = parent1[0:self.crossover_ix] + parent2[self.crossover_ix:]
+		offspring2 = parent2[0:self.crossover_ix] + parent[self.crossover_ix:]
