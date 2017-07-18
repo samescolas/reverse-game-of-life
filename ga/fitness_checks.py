@@ -2,12 +2,11 @@ import sys
 
 # 5 buckets and 400 total == 80
 def	check_pop(gene, population):
-	if '1' not in gene:
-		bucket = 0
-	else:
-		bucket = gene.index('1') + 1
-        if population >= bucket * 80 and population < (bucket + 1) * 80:
-            return True
+	classification = int(gene,2)
+	if classification > 396:
+		return False
+	if population <= classification:
+		return True
 	return False
 
 def	check_alive(gene, data):
