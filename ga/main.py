@@ -19,19 +19,20 @@ with open('../resources/train.csv', 'rb') as csvfile:
 		if i == 0:
 			keys = record
 			continue
-		elif i == 501:
+		elif i == 1001:
 			break
                 summary[i] = {
 					'population': reduce((lambda x,y: int(x)+int(y)), record[402:]),
 					'delta': record[1],
 					'cells': {}
 				}
-                print str(i/500.0*100) + '%'
+                print str(i/1000.0*100) + '%'
                 for j,cell in enumerate(keys[402:]):
 					neighbors = get_neighbors(int(cell[5:]), record[401:])
 					density = get_quadrant_densities(record[401:])
 					summary[i]['cells'][j+1] = {
 						'status': record[j+2],
+						'outcome': record[j+398],
 						'neighbors': len(neighbors[0]),
 						'living_neighbors': len(neighbors[1]),
 						'quadrant': get_quadrant(int(cell[5:])),
@@ -52,17 +53,43 @@ fc = FitnessCalc(summary)
 #create initial population
 ga.create_initial_population()
 
+for generations in xrange(1,11):
+	max_fitness = 0.0
+	print 'generation ' + str(generations)
+	print 'max fitness: ' + str(max_fitness)
 #assign fitness levels
-total_fitness = 0.0
+	total_fitness = 0.0
+	for i,indiv in enumerate(ga.population):
+		fitness = fc.calculate_fitness(indiv['chromosome'])
+		total_fitness += fitness
+		indiv['fitness'] = fitness
+		print str(round(fitness,2)) + ' ' + indiv['chromosome']
+		print 'avg fitness: ' + str(float(total_fitness) / (i+1))
+
+	#selection (ROULETTE STYLE)
+	new_pop = []
+	for pair in xrange(ga.pop_size / 2):
+		c1,c2 = ga.roulette_selection(total_fitness),ga.roulette_selection(total_fitness)
+		print 'combining '
+		print c1
+		print ' and '
+		print c2
+		new_pop.append({
+			'fitness': 0,
+			'chromosome': ga.mutate(c1)
+		} )
+		new_pop.append( {
+			'fitness': 0,
+			'chromosome': ga.mutate(c2)
+		} )
+	
+	ga.population = new_pop
+
+winner = ga.population[0]
 for indiv in ga.population:
-	fitness = fc.calculate_fitness(indiv['chromosome'])
-	total_fitness += fitness
-	indiv['fitness'] = fitness
-	print str(fitness) + ' ' + indiv['chromosome']
+	if indiv['fitness'] > winner['fitness']:
+		winner = indiv
 
-#selection (ROULETTE STYLE)
-c1 = ga.roulette_selection(total_fitness)
-c2 = ga.roulette_selection(total_fitness)
-
-print c1
-print c2
+print 'best chromosome: ' + winner['chromosome']
+print 'fitness: ' + str(winner['fitness'])
+fc.calculate_fitness(winner['chromosome'])
