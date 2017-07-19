@@ -6,10 +6,10 @@ import sys
 class FitnessCalc:
 
 	def __init__(self, training_data):
-		self.w1 = 0.35
-		self.w2 = 0.5
+		self.w1 = 0.3
+		self.w2 = 0.4
 		self.w3 = 0.1
-		self.w4 = 0.15
+		self.w4 = 0.2
 		self.genes = [
 			(0,9), (10,1), (12,2), (15,4), (20,9),
 			(30,5), (36,4), (41,3), (45,5), (51,5), (57,1)

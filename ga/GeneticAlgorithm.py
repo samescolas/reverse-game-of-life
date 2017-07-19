@@ -25,8 +25,8 @@ class GeneticAlgorithm:
 		self.chromosome_length = 58
 		self.crossover_ix = 30
 		self.mutation_rate = 0.00742
-		self.activation_rate = 0.12
-		self.pop_size = 80
+		self.activation_rate = 0.08
+		self.pop_size = 140
 		self.population = []
 
 	def create_individual(self):
