@@ -30,7 +30,7 @@ def		process_data(filepath, limit=100000, verbose=False):
 					'quadrant_density': density[get_quadrant(int(cell[5:])) - 1],
 					'nearest_edge': get_nearest_edge(int(cell[5:]))
 				}
-				if record[j+2] == '1':
+				if record[j+402] == '1':
 					summary[i]['cells'][j+1]['size'] = get_size(int(cell[5:]), record[401:])
 				else:
 					summary[i]['cells'][j+1]['size'] = 0
