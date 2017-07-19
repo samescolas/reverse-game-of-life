@@ -4,29 +4,29 @@ import FitnessCalc
 # I should probably graph the bucketized values
 # and distribute buckets evenly or something...
 
-# {00}[01,05) | population: 20%,40%,60%,80%,100%
-# {05}[06,07) | alive?
-# {07}[08,10) | corner,side,center
-# {10}[11,15) | # of living neighbors (BINARY)
-# {15}[16,25) | # of living cells (BINARY)
-# {25}[26,31) | layers of isolation
-# {31}[32,35) | distance to nearest edge
-# {35}[36,39) | quadrant
-# {39}[40,45) | quadrant population density
-# {45}[46,51) | delta
-# {51}[52,53) | prediction
+# {00}[01,10) | population: (BINARY)
+# {12}[13,12) | alive?
+# {14}[13,15) | corner,side,center
+# {15}[16,20) | # of living neighbors (BINARY)
+# {20}[21,30) | # of living cells (BINARY)
+# {30}[31,36) | layers of isolation
+# {36}[37,41) | distance to nearest edge
+# {41}[42,45) | quadrant
+# {45}[46,51) | quadrant population density
+# {51}[52,57) | delta
+# {57}[58,59) | prediction
 
 class GeneticAlgorithm:	
 	def __init__(self):
 		self.genes = [
-			(0,4), (5,1), (7,2), (10,4), (15,9),
-			(25,5), (31,3), (35,3), (39,5), (45,5), (51,1)
+			(0,9), (10,1), (12,2), (15,4), (20,9),
+			(30,5), (36,4), (41,3), (45,5), (51,5), (57,1)
 		]
-		self.chromosome_length = 52
-		self.crossover_ix = 23
-		self.mutation_rate = 0.002
-		self.activation_rate = 0.3
-		self.pop_size = 150
+		self.chromosome_length = 58
+		self.crossover_ix = 30
+		self.mutation_rate = 0.00742
+		self.activation_rate = 0.12
+		self.pop_size = 80
 		self.population = []
 
 	def create_individual(self):
@@ -40,10 +40,14 @@ class GeneticAlgorithm:
 		for (activator,length) in self.genes[:-1]:
 			if random.random() < self.activation_rate:
 				chromosome[activator] = '1'
-			if activator == 10:
+			if activator == 15:
 				chromosome[activator+1:activator+length+1] = self.create_binary_string(length, (0,8))
-			elif activator == 15:
-				chromosome[activator+1:activator+length+1] = self.create_binary_string(length, (0,396))
+			elif activator == 0:
+				chromosome[activator+1:activator+length+1] = self.create_binary_string(length, (0,200))
+			elif activator == 20:
+				chromosome[activator+1:activator+length+1] = self.create_binary_string(length, (0,100))
+			elif activator == 36:
+				chromosome[activator+1:activator+length+1] = self.create_binary_string(length, (0,10))
 			else:
 				if random.random() > float(1.0/(length+1)):
 					chromosome[activator+1] = '1'
