@@ -6,15 +6,15 @@ import sys
 class FitnessCalc:
 
 	def __init__(self, training_data):
-		self.w1 = 0.4
-		self.w2 = 0.3
-		self.w3 = 0.15
+		self.w1 = 0.35
+		self.w2 = 0.5
+		self.w3 = 0.1
 		self.w4 = 0.15
 		self.genes = [
-			(0,4), (5,1), (7,2), (10,4), (15,9),
-			(25,5), (31,3), (35,3), (39,5), (45,5), (51,1)
+			(0,9), (10,1), (12,2), (15,4), (20,9),
+			(30,5), (36,4), (41,3), (45,5), (51,5), (57,1)
 		]
-		self.chromosome_length = 52
+		self.chromosome_length = 58
 		self.training_data = training_data
 		self.num_examples = len(self.training_data.keys())
 
@@ -24,15 +24,21 @@ class FitnessCalc:
 		for ix in xrange(1,self.num_examples + 1):
 			results = [sum(x) for x in zip(results, self.test_chromosome(self.training_data[ix], chromosome))]
 		tp,fp,tn,fn = results
-		PA = float(tp) / max((tp+tn+fp+fn), 0.000001)
+		if tp + fp == 0:
+			PA = 0
+		else:
+			PA = float(tp) / float(tp+fp)
 		C = float(tp+tn)/(tp+fp+fn+tn)
-		S = float(tp) / max((tp + fn), 0.000001)
-		CPH = 10 - reduce((lambda x,y:int(x)+int(y)), [chromosome[x] for x,y in self.genes])
+		if tp + fn == 0:
+			S = 0
+		else:
+			S = float(tp) / float(tp + fn)
+		CPH = reduce((lambda x,y:int(x)+int(y)), [chromosome[x] for x,y in self.genes]) / 10.0
 		print 'score: ' + str(100 * float(tp+tn)/(tp+fp+fn+tn))
-		print 'tp: {}'.format(tp)
-		print 'tn: {}'.format(tn)
-		print 'fp: {}'.format(fp)
-		print 'fn: {}'.format(fn)
+		print 'PA: {}'.format(PA)
+		print 'C: {}'.format(C)
+		print 'S: {}'.format(S)
+		print 'CPH: {}'.format(CPH)
 		if tp + fp == 0 or tn + fn == 0:
 			return 0
 		return self.w1*PA + self.w2*C + self.w3*CPH + self.w4*S
