@@ -11,8 +11,8 @@ class FitnessCalc:
 		self.w3 = 0.1
 		self.w4 = 0.2
 		self.genes = [
-			(0,9), (10,1), (12,2), (15,4), (20,9),
-			(30,5), (36,4), (41,3), (45,5), (51,5), (57,1)
+			(0,1), (2,9), (12,2), (15,4), (20,9),
+			(30,4), (35,5), (41,5), (47,1)
 		]
 		self.chromosome_length = 58
 		self.training_data = training_data
@@ -81,7 +81,7 @@ class FitnessCalc:
 		test = []
 		if gene_id == 0:
 			test = [check_pop(gene, data['population'])]*400
-		elif gene_id == 9:
+		elif gene_id == 7:
 			test = [check_delta(gene, data['delta'])]*400
 		else:
 			for cell in xrange(1,401):
@@ -90,9 +90,7 @@ class FitnessCalc:
 					2: check_neighbors,
 					3: check_living_neighbors,
 					4: check_size,
-					5: check_isolation_layers,
-					6: check_nearest_edge,
-					7: check_quadrant,
-					8: check_quadrant_density,
+					5: check_nearest_edge,
+					6: check_quadrant_density,
 				}[gene_id](gene, data['cells'][cell]) )
 		return test
