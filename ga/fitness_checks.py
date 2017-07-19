@@ -46,32 +46,11 @@ def	check_size(gene, data):
 def	check_isolation_layers(gene, layers):
 	return True
 
-# Four buckets:
-#		0-1		000 B = 0
-#		2-3		100	B = 1
-#		4-6		010 B = 2
-#		7+		001	B = 3
-
 def	check_nearest_edge(gene, data):
 	classification = int(gene,2)
 	if classification > 10:
 		return False
 	if classification == data['nearest_edge']:
-		return True
-	return False
-
-
-#	Q0 = 000
-#	Q1 = 100
-#	Q2 = 010
-#	Q3 = 001
-
-def	check_quadrant(gene, data):
-	if '1' not in gene:
-		q = 0
-	else:
-		q = gene.index('1') + 1
-	if int(q) == int(data['quadrant']):
 		return True
 	return False
 
