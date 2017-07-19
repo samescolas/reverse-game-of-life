@@ -19,20 +19,18 @@ with open('../resources/train.csv', 'rb') as csvfile:
 		if i == 0:
 			keys = record
 			continue
-		elif i < 5000:
-			continue
-		elif i == 5501:
+		elif i == 501:
 			break
-		summary[i-4999] = {
+		summary[i] = {
 			'population': reduce((lambda x,y: int(x)+int(y)), record[402:]),
 			'delta': record[1],
 			'cells': {}
 		}
-		print str(i)
+		print str(100 *(i/500.0)) + '%'
 		for j,cell in enumerate(keys[402:]):
 			neighbors = get_neighbors(int(cell[5:]), record[401:])
 			density = get_quadrant_densities(record[401:])
-			summary[i-4999]['cells'][j+1] = {
+			summary[i]['cells'][j+1] = {
 				'status': record[j+2],
 				'outcome': record[j+398],
 				'neighbors': len(neighbors[0]),
@@ -42,9 +40,9 @@ with open('../resources/train.csv', 'rb') as csvfile:
 				'nearest_edge': get_nearest_edge(int(cell[5:]))
 			}
 			if record[j+2] == '1':
-				summary[i-4999]['cells'][j+1]['size'] = get_size(int(cell[5:]), record[401:])
+				summary[i]['cells'][j+1]['size'] = get_size(int(cell[5:]), record[401:])
 			else:
-				summary[i-4999]['cells'][j+1]['size'] = 0
+				summary[i]['cells'][j+1]['size'] = 0
 
 # create GA instance
 ga = GeneticAlgorithm()
