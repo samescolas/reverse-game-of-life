@@ -31,34 +31,15 @@ def	check_living_neighbors(gene, data):
             return False
         actual = data['living_neighbors']
 
-        if int(classification) == int(actual):
+        if int(actual) >= int(classification):
             return True
 	return False
 
-# Six buckets: 
-#       0-2     00000   B = 0
-#       3-4     10000   B = 1
-#       5-7     01000   B = 2
-#       8-11    00100   B = 3
-#       9-15,   00010   B = 4
-#       16+     00001   B = 5
-
 def	check_size(gene, data):
-	if '1' not in gene:
-		bucket = 0
-	else:
-		bucket = gene.index('1') + 1
-	if bucket == 0 and data['size'] < 2:
-		return True
-	elif bucket == 1 and data['size'] < 5:
-		return True
-	elif bucket == 2 and data['size'] < 8:
-		return True
-	elif bucket == 3 and data['size'] < 12:
-		return True
-	elif bucket == 4 and data['size'] < 16:
-		return True
-	elif bucket == 5 and data['size'] >= 16:
+	classification = int(gene,2)
+	if classification > 396:
+		return False
+	if data['size'] < classification:
 		return True
 	return False
 
@@ -72,18 +53,10 @@ def	check_isolation_layers(gene, layers):
 #		7+		001	B = 3
 
 def	check_nearest_edge(gene, data):
-	if '1' not in gene:
-		bucket = 0
-	else:
-		bucket = gene.index('1') + 1
-	nearest = data['nearest_edge'];
-	if bucket == 0 and nearest < 2:
-		return True
-	elif bucket == 1 and nearest > 1 and nearest < 4:
-		return True
-	elif bucket == 2 and nearest > 3 and nearest < 7:
-		return True
-	elif bucket == 3 and nearest > 6:
+	classification = int(gene,2)
+	if classification > 10:
+		return False
+	if classification == data['nearest_edge']:
 		return True
 	return False
 
