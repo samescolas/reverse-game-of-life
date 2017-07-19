@@ -4,23 +4,21 @@ import FitnessCalc
 # I should probably graph the bucketized values
 # and distribute buckets evenly or something...
 
-# {00}[01,10) | population: (BINARY)
-# {12}[13,12) | alive?
-# {14}[13,15) | corner,side,center
+# {00}[01,02) | alive?
+# {02}[03,12) | population: (BINARY)
+# {12}[13,15) | corner,side,center
 # {15}[16,20) | # of living neighbors (BINARY)
 # {20}[21,30) | # of living cells (BINARY)
-# {30}[31,36) | layers of isolation
-# {36}[37,41) | distance to nearest edge
-# {41}[42,45) | quadrant
-# {45}[46,51) | quadrant population density
-# {51}[52,57) | delta
-# {57}[58,59) | prediction
+# {30}[31,35) | distance to nearest edge
+# {35}[36,41) | quadrant population density
+# {41}[42,47) | delta
+# {47}[48,49) | prediction
 
 class GeneticAlgorithm:	
 	def __init__(self):
 		self.genes = [
-			(0,9), (10,1), (12,2), (15,4), (20,9),
-			(30,5), (36,4), (41,3), (45,5), (51,5), (57,1)
+			(0,1), (2,9), (12,2), (15,4), (20,9),
+			(30,4), (35,5), (41,5), (47,1)
 		]
 		self.chromosome_length = 58
 		self.crossover_ix = 30
@@ -40,13 +38,13 @@ class GeneticAlgorithm:
 		for (activator,length) in self.genes[:-1]:
 			if random.random() < self.activation_rate:
 				chromosome[activator] = '1'
-			if activator == 15:
-				chromosome[activator+1:activator+length+1] = self.create_binary_string(length, (0,8))
-			elif activator == 0:
+			if activator == 2:
 				chromosome[activator+1:activator+length+1] = self.create_binary_string(length, (0,200))
+			elif activator == 15:
+				chromosome[activator+1:activator+length+1] = self.create_binary_string(length, (0,8))
 			elif activator == 20:
 				chromosome[activator+1:activator+length+1] = self.create_binary_string(length, (0,100))
-			elif activator == 36:
+			elif activator == 30:
 				chromosome[activator+1:activator+length+1] = self.create_binary_string(length, (0,10))
 			else:
 				if random.random() > float(1.0/(length+1)):
