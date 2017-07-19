@@ -1,3 +1,42 @@
+import csv
+import sys
+
+def		process_data(filepath, limit=100000, verbose=False):
+	summary = {}
+	with open(filepath, 'rb') as csvfile:
+		reader = csv.reader(csvfile, delimiter=',')
+		for i,record in enumerate(reader):
+			if i == 0:
+				keys = record
+				continue
+			elif i == limit:
+				break
+			summary[i] = {
+				'population': reduce((lambda x,y: int(x)+int(y)), record[402:]),
+				'delta': record[1],
+				'cells': {}
+			}
+			if verbose == True:
+				print str(100 *(float(i)/limit)) + '%'
+			for j,cell in enumerate(keys[402:]):
+				neighbors = get_neighbors(int(cell[5:]), record[401:])
+				density = get_quadrant_densities(record[401:])
+				summary[i]['cells'][j+1] = {
+					'status': record[j+402],
+					'outcome': record[j+2],
+					'neighbors': len(neighbors[0]),
+					'living_neighbors': len(neighbors[1]),
+					'quadrant': get_quadrant(int(cell[5:])),
+					'quadrant_density': density[get_quadrant(int(cell[5:])) - 1],
+					'nearest_edge': get_nearest_edge(int(cell[5:]))
+				}
+				if record[j+2] == '1':
+					summary[i]['cells'][j+1]['size'] = get_size(int(cell[5:]), record[401:])
+				else:
+					summary[i]['cells'][j+1]['size'] = 0
+	return summary
+
+
 def     get_neighbors(cell, example):
         (l,r,t,b) = (cell-1,cell+1,cell-20,cell+20)
         (tl,tr,bl,br) = (t-1,t+1,b-1,b+1)
