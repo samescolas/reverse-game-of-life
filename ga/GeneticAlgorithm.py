@@ -24,7 +24,7 @@ class GeneticAlgorithm:
 		]
 		self.chromosome_length = 58
 		self.crossover_ix = 30
-		self.mutation_rate = 0.00742
+		self.mutation_rate = 0.0025
 		self.activation_rate = 0.08
 		self.pop_size = 140
 		self.population = []
@@ -93,11 +93,14 @@ class GeneticAlgorithm:
 					chromosome[gene_id] = '1'
 			if random.random() < (self.mutation_rate * length):
 				print 'mutating data!'
-				if gene_id == 10:
-					b = '{0:b}'.format(random.randint(0,8))
-					while len(b) < 4:
-						b = '0'+b
-					chromosome[gene_id+1:gene_id+length+1] = list(b)
+				if gene_id == 0:
+					chromosome[gene_id+1:gene_id+length+1] = self.create_binary_string(length, (0,200))
+				elif gene_id == 15:
+					chromosome[gene_id+1:gene_id+length+1] = self.create_binary_string(length, (0,8))
+				elif gene_id == 20:
+					chromosome[gene_id+1:gene_id+length+1] = self.create_binary_string(length, (0,100))
+				elif gene_id == 36:
+					chromosome[gene_id+1:gene_id+length+1] = self.create_binary_string(length, (0,10))
 				else:
 					random.shuffle(chromosome[gene_id+1:gene_id+length+1])
 		return ''.join(chromosome)
