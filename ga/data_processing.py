@@ -20,12 +20,14 @@ def		process_data(filepath, limit=100000, verbose=False):
 				print str(100 *(float(i)/limit)) + '%'
 			for j,cell in enumerate(keys[402:]):
 				neighbors = get_neighbors(int(cell[5:]), record[401:])
+				if len(neighbors[0]) == 0:
+					sys.exit(0)
 				density = get_quadrant_densities(record[401:])
 				summary[i]['cells'][j+1] = {
 					'status': record[j+402],
 					'outcome': record[j+2],
 					'neighbors': len(neighbors[0]),
-					'living_neighbors': len(neighbors[1]),
+					'living_neighbors': float(len(neighbors[1]))/len(neighbors[0]),
 					'quadrant': get_quadrant(int(cell[5:])),
 					'quadrant_density': density[get_quadrant(int(cell[5:])) - 1],
 					'nearest_edge': get_nearest_edge(int(cell[5:]))
@@ -46,43 +48,35 @@ def     get_neighbors(cell, example):
 	if l > 0 and cell % 20 != 1:
 		if example[l] == '1':
 			living_neighbors.append(l)
-		else:
-			neighbors.append(l)
+		neighbors.append(l)
 	if r < 400 and cell % 20 != 0:
 		if example[r] == '1':
 			living_neighbors.append(r)
-		else:
-			neighbors.append(r)
+		neighbors.append(r)
 	if t > 0:
 		if example[t] == '1':
 			living_neighbors.append(t)
-		else:
-			neighbors.append(t)
+		neighbors.append(t)
 	if b < 400:
 		if example[b] == '1':
 			living_neighbors.append(b)
-		else:
-			neighbors.append(b)
+		neighbors.append(b)
 	if tl > 0 and cell % 20 != 1:
 		if example[tl] == '1':
 			living_neighbors.append(tl)
-		else:
-			neighbors.append(tl)
+		neighbors.append(tl)
 	if tr > 0 and cell % 20 != 0:
 		if example[tr] == '1':
 			living_neighbors.append(tr)
-		else:
-			neighbors.append(tr)
+		neighbors.append(tr)
 	if bl < 400:
 		if example[bl] == '1':
 			living_neighbors.append(bl)
-		else:
-			neighbors.append(bl)
+		neighbors.append(bl)
 	if br < 400:
 		if example[br] == '1':
 			living_neighbors.append(br)
-		else:
-			neighbors.append(br)
+		neighbors.append(br)
 	return neighbors,living_neighbors
  
 def     get_size(cell, example):
