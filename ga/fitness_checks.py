@@ -32,7 +32,7 @@ def	check_living_neighbors(gene, data):
 
         actual = data['living_neighbors']
 
-        if actual*10.0 < float(classification):
+        if actual*10.0 > float(classification):
 			return True
 
 	return False
