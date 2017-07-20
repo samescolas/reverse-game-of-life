@@ -27,12 +27,14 @@ def	check_neighbors(gene, data):
 
 def	check_living_neighbors(gene, data):
         classification = int(gene,2)
-        if classification > 8:
-            return False
+        if classification > 10:
+			return False
+
         actual = data['living_neighbors']
 
-        if int(actual) >= int(classification):
-            return True
+        if actual*10.0 < float(classification):
+			return True
+
 	return False
 
 def	check_size(gene, data):
