@@ -16,7 +16,7 @@ fc = FitnessCalc(summary)
 #create initial population
 ga.create_initial_population()
 
-for generations in xrange(1,11):
+for generations in xrange(1,51):
 	max_fitness = 0.0
 	print 'generation ' + str(generations)
 	print 'max fitness: ' + str(max_fitness)
