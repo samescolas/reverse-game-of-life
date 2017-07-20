@@ -22,9 +22,9 @@ class GeneticAlgorithm:
 		]
 		self.chromosome_length = 48
 		self.crossover_ix = 30
-		self.mutation_rate = 0.01
+		self.mutation_rate = 0.005
 		self.activation_rate = 0.03
-		self.pop_size = 125
+		self.pop_size = 250
 		self.population = []
 
 	def create_individual(self):
@@ -41,7 +41,8 @@ class GeneticAlgorithm:
 			if activator == 2:
 				chromosome[activator+1:activator+length+1] = self.create_binary_string(length, (0,200))
 			elif activator == 15:
-				chromosome[activator+1:activator+length+1] = self.create_binary_string(length, (0,10))
+				#chromosome[activator+1:activator+length+1] = self.create_binary_string(length, (0,10))
+				chromosome[activator+1:activator+length+1] = self.create_binary_string(length, (6,6))
 			elif activator == 20:
 				chromosome[activator+1:activator+length+1] = self.create_binary_string(length, (0,100))
 			elif activator == 30:

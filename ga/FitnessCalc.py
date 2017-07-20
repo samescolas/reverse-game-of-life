@@ -6,10 +6,10 @@ import sys
 class FitnessCalc:
 
 	def __init__(self, training_data):
-		self.w1 = 0.3
-		self.w2 = 0.2
+		self.w1 = 0.1
+		self.w2 = 0.3
 		self.w3 = 0.1
-		self.w4 = 0.4
+		self.w4 = 0.5
 		self.genes = [
 			(0,1), (2,9), (12,2), (15,4), (20,9),
 			(30,4), (35,5), (41,5), (47,1)
@@ -44,7 +44,7 @@ class FitnessCalc:
 			#return (self.w1*PA + self.w2*C + self.w3*CPH + self.w4*S)/2.0
 
 		#return self.w1*PA + self.w2*C + self.w3*CPH + self.w4*S
-		return self.w1*PA + self.w2*CPH + self.w3*S + abs(self.w4*(0.5 - (float(tp+tn)/(tp+fp+fn+tn))))
+		return self.w1*PA + self.w2*CPH + self.w3*S + abs(self.w4*(0.5 - C))
 
 	def test_chromosome(self, example, chromosome):
 		classification_results = {}
