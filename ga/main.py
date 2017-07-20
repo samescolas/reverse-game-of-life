@@ -5,7 +5,7 @@ from GeneticAlgorithm import GeneticAlgorithm
 from data_processing import process_data
 
 # initialize empty collection
-summary = process_data('../resources/train.csv', 300, True)
+summary = process_data('../resources/train.csv', 500, True)
 
 # create GA instance
 ga = GeneticAlgorithm()
