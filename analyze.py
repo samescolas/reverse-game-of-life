@@ -4,11 +4,13 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn import model_selection, preprocessing
+from sklearn.cross_validation import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
 import xgboost as xgb
 from data_processing import get_neighbors
 
-num_examples = 25
+num_examples = 50000
 
 pd.options.mode.chained_assignment = None
 
@@ -27,6 +29,7 @@ cols = ['board', 'delta', 'position', 'type', 'alive', 'neighbors', 'population'
 processed_data = pd.DataFrame
 
 for board in xrange(num_examples):
+	print str(100 * (float(board)/num_examples)) + '%'
 	df = [
 		[board]*400,
 		[deltas[board]]*400,
@@ -45,7 +48,12 @@ for board in xrange(num_examples):
 		processed_data = pd.concat([processed_data, df], ignore_index=True)
 
 X = processed_data.drop('outcome', axis=1)
-Y = processed_data['outcome']
+y = processed_data['outcome']
 
-print X.head(10)
-print Y.head(10)
+Xtrain,Xtest,ytrain,ytest = train_test_split(X, y, random_state=1)
+
+model = GaussianNB()
+model.fit(Xtrain, ytrain)
+y_model = model.predict(Xtest)
+
+print str(accuracy_score(ytest, y_model))
