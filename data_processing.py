@@ -1,4 +1,4 @@
-def     get_neighbors(cell, example):
+def	get_nghbs(cell, example):
         (l,r,t,b) = (cell-1,cell+1,cell-20,cell+20)
         (tl,tr,bl,br) = (t-1,t+1,b-1,b+1)
         living_neighbors = []
@@ -36,7 +36,11 @@ def     get_neighbors(cell, example):
 		if example[br] == 1:
 			living_neighbors.append(br)
 		neighbors.append(br)
-	return float(len(living_neighbors)) / len(neighbors)
+	return (neighbors,living_neighbors)
+
+def     get_neighbors(cell, example):
+	n = get_nghbs(cell, example)
+	return float(len(n[1])) / len(n[0])
 
 def     get_size(cell, example):
         members = {}
@@ -46,7 +50,7 @@ def     get_size(cell, example):
             new = []
             for c in to_add:
                 members[c] = 1
-                new += get_neighbors(c, example)[1]
+                new += get_nghbs(c, example)[1]
             new = [x for x in new if x not in members.keys()]
         return len(members.keys())
 
