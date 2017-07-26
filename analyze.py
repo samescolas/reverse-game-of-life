@@ -4,13 +4,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.cross_validation import train_test_split
-from sklearn.naive_bayes import GaussianNB
-from sklearn.metrics import accuracy_score
+from sklearn.svm import SVR
+from sklearn.feature_selection import RFE
 import xgboost as xgb
-from data_processing import get_neighbors
+from data_processing import get_neighbors,get_size
 
-num_examples = 50000
+num_examples = 1000
 
 pd.options.mode.chained_assignment = None
 
@@ -24,7 +23,7 @@ outcomes = train_df[start].stack()
 deltas = train_df['delta'].values
 types = ([1]+[2]*18+[1]) + ([2]+[3]*18+[2])*18 + ([1]+[2]*18+[1])
 
-cols = ['board', 'delta', 'position', 'type', 'alive', 'neighbors', 'population', 'outcome']
+cols = ['board', 'delta', 'position', 'size', 'type', 'alive', 'neighbors', 'population', 'outcome']
 
 processed_data = pd.DataFrame
 
@@ -34,6 +33,7 @@ for board in xrange(num_examples):
 		[board]*400,
 		[deltas[board]]*400,
 		range(1,401),
+		[get_size(x, data[board].values) for x in xrange(400)],
 		[types[x] for x in xrange(400)],
 		list(data[board].values.transpose()),
                 [get_neighbors(x, data[board].values) for x in xrange(400)],
@@ -50,10 +50,24 @@ for board in xrange(num_examples):
 X = processed_data.drop('outcome', axis=1)
 y = processed_data['outcome']
 
-Xtrain,Xtest,ytrain,ytest = train_test_split(X, y, random_state=1)
+#Xtrain,Xtest,ytrain,ytest = train_test_split(X, y, random_state=1)
 
-model = GaussianNB()
-model.fit(Xtrain, ytrain)
-y_model = model.predict(Xtest)
+estimator = SVR(kernel="linear")
+selector = RFE(estimator, 5, step=1)
+selector = selector.fit(X,y)
+print selector.support_
+print selector.ranking_
+print cols[0:-1]
 
-print str(accuracy_score(ytest, y_model))
+#model = LogisticRegression()
+#rfe = RFE(model, 3)
+#rfe.fit(X, y)
+
+#print rfe.support_
+#print rfe.ranking_
+
+#model = GaussianNB()
+#model.fit(Xtrain, ytrain)
+#y_model = model.predict(Xtest)
+
+#print str(accuracy_score(ytest, y_model))
